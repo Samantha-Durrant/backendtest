@@ -3,7 +3,7 @@
 // ========================================
 
 // 1. Install dependencies:
-// npm install @sendgrid/mail express cors dotenv express-rate-limit passport passport-google-oauth20 express-session
+// npm install @sendgrid/mail express cors dotenv express-rate-limit passport passport-google-oauth20 express-session mongoose
 
 // ========================================
 
@@ -14,6 +14,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const cors = require('cors');
 const sgMail = require('@sendgrid/mail');
 const rateLimit = require('express-rate-limit');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
@@ -258,6 +259,119 @@ app.get('/api/user', (req, res) => {
     } else {
         res.status(401).json({ error: 'Not authenticated' });
     }
+});
+
+// 1. --- MONGOOSE SETUP ---
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/masterlist', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connected');
+});
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
+// 2. --- SCHEMA & MODEL ---
+const ContactSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phone: String,
+  additionalInfo: String,
+}, { _id: true });
+
+const OrgSchema = new mongoose.Schema({
+  name: { type: String, unique: true, required: true },
+  category: { type: String, required: true },
+  contacts: [ContactSchema],
+});
+
+const Org = mongoose.model('Org', OrgSchema);
+
+// 3. --- API ENDPOINTS ---
+
+// GET all orgs/brands/people and their contacts
+app.get('/api/master-list', async (req, res) => {
+  const orgs = await Org.find({});
+  res.json(orgs);
+});
+
+// POST add a new org/brand/person (with category)
+app.post('/api/master-list', async (req, res) => {
+  const { name, category } = req.body;
+  if (!name || !category) return res.status(400).json({ error: 'Name and category required' });
+  try {
+    const org = new Org({ name, category, contacts: [] });
+    await org.save();
+    res.status(201).json(org);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// POST add a contact to an org/brand/person
+app.post('/api/master-list/:orgId/contact', async (req, res) => {
+  const { orgId } = req.params;
+  const { name, email, phone, additionalInfo } = req.body;
+  if (!name || (!email && !phone)) return res.status(400).json({ error: 'Contact name and at least email or phone required' });
+  try {
+    const org = await Org.findById(orgId);
+    if (!org) return res.status(404).json({ error: 'Organization not found' });
+
+    // Prevent duplicate email/phone
+    const duplicate = org.contacts.find(
+      c => (email && c.email === email) || (phone && c.phone === phone)
+    );
+    if (duplicate) return res.status(409).json({ error: 'Duplicate contact (email or phone)' });
+
+    org.contacts.push({ name, email, phone, additionalInfo });
+    await org.save();
+    res.status(201).json(org);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// PUT edit a contact
+app.put('/api/master-list/:orgId/contact/:contactId', async (req, res) => {
+  const { orgId, contactId } = req.params;
+  const { name, email, phone, additionalInfo } = req.body;
+  try {
+    const org = await Org.findById(orgId);
+    if (!org) return res.status(404).json({ error: 'Organization not found' });
+    const contact = org.contacts.id(contactId);
+    if (!contact) return res.status(404).json({ error: 'Contact not found' });
+
+    // Prevent duplicate email/phone (excluding self)
+    const duplicate = org.contacts.find(
+      c => c.id !== contactId && ((email && c.email === email) || (phone && c.phone === phone))
+    );
+    if (duplicate) return res.status(409).json({ error: 'Duplicate contact (email or phone)' });
+
+    contact.name = name;
+    contact.email = email;
+    contact.phone = phone;
+    contact.additionalInfo = additionalInfo;
+    await org.save();
+    res.json(org);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE a contact
+app.delete('/api/master-list/:orgId/contact/:contactId', async (req, res) => {
+  const { orgId, contactId } = req.params;
+  try {
+    const org = await Org.findById(orgId);
+    if (!org) return res.status(404).json({ error: 'Organization not found' });
+    org.contacts.id(contactId).remove();
+    await org.save();
+    res.json(org);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 // ========================================
