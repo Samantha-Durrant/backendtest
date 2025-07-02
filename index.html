@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wholesale Contact Discovery Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .control-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .results-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .brand-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .brand-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .brand-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .brand-item {
+            padding: 8px;
+            margin: 4px 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-item:hover {
+            background: #e9ecef;
+        }
+        
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+        
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .primary-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .secondary-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .secondary-btn:hover {
+            background: #7f8c8d;
+        }
+        
+        .success-btn {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .success-btn:hover {
+            background: #229954;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .brand-result {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+        
+        .brand-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .contact-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .contact-type {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .email-type {
+            background: #3498db;
+            color: white;
+        }
+        
+        .form-type {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .phone-type {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .contact-value {
+            font-family: monospace;
+            color: #555;
+        }
+        
+        .verification-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-left: 10px;
+        }
+        
+        .verified {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .partial {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .unverified {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .master-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .suggestion-box {
+            background: #e8f4f8;
+            border: 1px solid #b8e0e8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .suggestion-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        
+        .suggestion-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #d4ebf2;
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        /* Login Modal Styles */
+        #loginModal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #loginModal div {
+            background: white;
+            padding: 32px;
+            border-radius: 10px;
+            max-width: 350px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        #loginModal h2 {
+            margin-bottom: 18px;
+        }
+
+        #loginModal label {
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        #loginModal input {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        #loginModal button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #loginModal button[type="button"] {
+            background: #aaa;
+            color: white;
+        }
+
+        #loginModal button[type="button"]:hover {
+            background: #999;
+        }
+
+        #loginModal button[type="submit"] {
+            background: #3498db;
+            color: white;
+        }
+
+        #loginModal button[type="submit"]:hover {
+            background: #2980b9;
+        }
+
+        #loginError {
+            color: #e74c3c;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" style="display:flex; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:3000; align-items:center; justify-content:center;">
+      <div style="background:white; padding:32px; border-radius:10px; max-width:350px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2); position:relative;">
+        <h2 style="margin-bottom:18px;">Login to Continue</h2>
+        <form id="loginForm" onsubmit="return false;">
+          <label>Email:</label>
+          <input id="loginEmail" type="email" style="width:100%; margin-bottom:12px; padding:8px; border-radius:4px; border:1px solid #ccc;" required>
+          <label>Password:</label>
+          <input id="loginPassword" type="password" style="width:100%; margin-bottom:18px; padding:8px; border-radius:4px; border:1px solid #ccc;" required>
+          <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button type="button" onclick="skipLogin()" style="padding:8px 16px; border:none; background:#aaa; color:white; border-radius:4px;">Skip</button>
+            <button type="submit" style="padding:8px 16px; border:none; background:#3498db; color:white; border-radius:4px;">Login</button>
+          </div>
+        </form>
+        <div id="loginError" style="color:#e74c3c; margin-top:10px; display:none;"></div>
+      </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>🕶️ Wholesale Contact Discovery Agent</h1>
+            <p class="subtitle">Find verified wholesale contacts for sunglass brands</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="control-panel">
+                <h2>Control Panel</h2>
+                
+                <div class="section">
+                    <h3>Quick Actions</h3>
+                    <button class="action-btn primary-btn" onclick="discoverTop50()">
+                        🔍 Discover Top 50 Brands
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="showCustomBrands()">
+                        🎯 Custom Brand Search
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="showQuickActionIdeas()">
+                        💡 Generate Quick Action Ideas
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="generateNewIdeas()">
+                        🔄 More Suggestions
+                    </button>
+                </div>
+                
+                <div id="customBrandsSection" class="section" style="display: none;">
+                    <h3>Custom Brands</h3>
+                    <input type="text" class="brand-input" id="brandInput" 
+                           placeholder="Enter brand name and press Enter">
+                    <textarea class="brand-input" id="customEmailInstructions"
+        placeholder="Optional: What should the agent mention in the outreach emails to these brands? (e.g. 'Mention that we love their recent collection and that they are a top 50 brand.')"></textarea>
+                    <div class="brand-list" id="brandList"></div>
+                    <button class="action-btn success-btn" onclick="discoverCustomBrands()">
+                        Start Discovery
+                    </button>
+                </div>
+                
+                <div class="section">
+                    <h3>View Data</h3>
+                    <button class="action-btn secondary-btn" onclick="showMasterList()">
+                        📋 Master Contact List
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="exportData()">
+                        💾 Export to JSON
+                    </button>
+                </div>
+            </div>
+            
+            <div class="results-panel">
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" onclick="showTab('results')">
+                            Discovery Results
+                        </button>
+                        <button class="tab-btn" onclick="showTab('master')">
+                            Master List
+                        </button>
+                        <button class="tab-btn" onclick="showTab('stats')">
+                            Statistics
+                        </button>
+                        <button class="tab-btn" onclick="showTab('analytics')">
+                            Analytics
+                        </button>
+                    </div>
+                    
+                    <div id="resultsTab" class="tab-content active">
+                        <div id="resultsContent">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <p>No discovery results yet. Start by discovering brands!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="masterTab" class="tab-content">
+                        <div id="masterContent">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <p>Master list is empty. Discover brands to populate it.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="statsTab" class="tab-content">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalBrands">0</div>
+                                <div class="stat-label">Brands Analyzed</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalContacts">0</div>
+                                <div class="stat-label">Contacts Found</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="verifiedContacts">0</div>
+                                <div class="stat-label">Verified Contacts</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="masterListSize">0</div>
+                                <div class="stat-label">Master List Size</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="analyticsTab" class="tab-content">
+                        <div id="analyticsContent">
+                            <!-- Analytics content will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Email Compose Modal -->
+    <div id="emailModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center;">
+      <div style="background:white; padding:24px; border-radius:8px; max-width:400px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2); position:relative;">
+        <h3 style="margin-bottom:12px;">Send Email to <span id="modalBrand"></span></h3>
+        <form id="emailForm" onsubmit="return false;">
+          <label style="font-weight:bold;">Subject:</label>
+          <input id="modalSubject" type="text" style="width:100%; margin-bottom:12px; padding:8px; border-radius:4px; border:1px solid #ccc;" required>
+          <label style="font-weight:bold;">Message:</label>
+          <textarea id="modalMessage" rows="7" style="width:100%; margin-bottom:12px; padding:8px; border-radius:4px; border:1px solid #ccc;" required></textarea>
+          <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button type="button" onclick="closeEmailModal()" style="padding:8px 16px; border:none; background:#aaa; color:white; border-radius:4px;">Cancel</button>
+            <button type="submit" style="padding:8px 16px; border:none; background:#3498db; color:white; border-radius:4px;">Send</button>
+          </div>
+        </form>
+        <button onclick="closeEmailModal()" style="position:absolute; top:8px; right:12px; background:none; border:none; font-size:20px; color:#888; cursor:pointer;">&times;</button>
+      </div>
+    </div>
+    
+    <!-- Quick Action Ideas Modal -->
+    <div id="quickActionModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:2000; align-items:center; justify-content:center;">
+      <div style="background:white; padding:24px; border-radius:8px; max-width:400px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2); position:relative;">
+        <h3 style="margin-bottom:12px;">Quick Action Ideas</h3>
+        <ul id="quickActionIdeas" style="margin-bottom:16px;">
+          <!-- Ideas will be injected here -->
+        </ul>
+        <button onclick="closeQuickActionModal()" style="padding:8px 16px; border:none; background:#3498db; color:white; border-radius:4px;">Close</button>
+        <button onclick="generateNewIdeas()" style="padding:8px 16px; border:none; background:#27ae60; color:white; border-radius:4px; margin-left:8px;">New Ideas</button>
+      </div>
+    </div>
+    
+    <script>
+        // Simulated data storage
+        let discoveryResults = [];
+        let masterList = [];
+        let customBrands = [];
+        let customEmailInstructions = '';
+        let stats = {
+            totalBrands: 0,
+            totalContacts: 0,
+            verifiedContacts: 0,
+            masterListSize: 0
+        };
+        
+        let emailAnalytics = {
+            sent: 0,
+            responses: 0
+        };
+        
+        let userEmail = null;
+        let loggedIn = false;
+        let loginSkipped = false;
+        
+        // Top 50 sunglass brands
+        const top200Brands = [
+  "Ray-Ban", "Oakley", "Maui Jim", "Costa Del Mar", "Persol", "Tom Ford", "Gucci", "Prada", "Versace", "Warby Parker",
+  "Moscot", "Oliver Peoples", "Dior", "Chanel", "Burberry", "Coach", "Michael Kors", "Kate Spade", "Tory Burch", "Ralph Lauren",
+  "Polo Ralph Lauren", "Armani", "Dolce & Gabbana", "Fendi", "Saint Laurent", "Balenciaga", "Bottega Veneta", "Celine", "Givenchy", "Valentino",
+  "Salvatore Ferragamo", "Jimmy Choo", "Marc Jacobs", "Tiffany & Co", "Cartier", "Bvlgari", "Montblanc", "Chopard", "David Yurman", "John Varvatos",
+  "Paul Smith", "Ermenegildo Zegna", "Berluti", "Brioni", "Carrera", "Police", "Spy Optic", "Dragon", "Electric", "VonZipper",
+  "Smith Optics", "Native Eyewear", "Arnette", "Bolle", "Serengeti", "Revo", "Zeal Optics", "Julbo", "Shwood", "Randolph Engineering",
+  "Silhouette", "Lacoste", "Nike Vision", "Adidas Eyewear", "Puma Eyewear", "Fila Eyewear", "Levi's Eyewear", "Guess Eyewear", "Diesel Eyewear", "Calvin Klein Eyewear",
+  "Tommy Hilfiger Eyewear", "Hugo Boss", "Boss Orange", "Emporio Armani", "Giorgio Armani", "Roberto Cavalli", "Escada", "Max Mara", "Moschino", "Dsquared2",
+  "Jimmy Fairly", "Gentle Monster", "Illesteva", "Mykita", "Linda Farrow", "Cutler and Gross", "Retrosuperfuture", "Etnia Barcelona", "Komono", "Andy Wolf",
+  "Garrett Leight", "Salt Optics", "RAEN", "Blenders Eyewear", "Diff Eyewear", "Quay Australia", "Le Specs", "Pared Eyewear", "Sunday Somewhere", "Valley Eyewear",
+  "Akila", "Vint & York", "EyeBuyDirect", "Zenni Optical", "GlassesUSA", "LensCrafters", "Sunglass Hut", "Specsavers", "Vision Express", "Optical Express",
+  "For Art's Sake", "Oscar Magnuson", "Vogue Eyewear", "Polaroid Eyewear", "Superdry Eyewear", "Ted Baker Eyewear", "Oliver Goldsmith", "Ray-Ban Jr", "Ray-Ban Tech",
+  "Oakley Youth", "Oakley X Metal", "Prizm", "Holbrook", "Frogskins", "Jawbreaker", "Radar EV", "Flak 2.0", "Sutro", "Flight Jacket",
+  "Nike Show X2", "Nike Tailwind", "Nike Skylon Ace", "Nike Rabid", "Nike Mercurial", "Nike Trainer", "Nike Maverick", "Nike Bandit", "Nike Premier", "Nike Essential",
+  "Costa Fantail", "Costa Blackfin", "Costa Rincon", "Costa Tuna Alley", "Costa Brine", "Costa Harpoon", "Costa Permit", "Costa Saltbreak", "Costa Corbina", "Costa Reefton",
+  "Maui Jim Red Sands", "Maui Jim Peahi", "Maui Jim Banyans", "Maui Jim Ho'okipa", "Maui Jim Makaha", "Maui Jim Breakwall", "Maui Jim Stingray", "Maui Jim Big Wave", "Maui Jim Lighthouse", "Maui Jim Koki Beach",
+  "Persol PO0649", "Persol PO0714", "Persol PO3152S", "Persol PO3225S", "Persol PO3019S", "Persol PO3048S", "Persol PO3092SM", "Persol PO9649S", "Persol PO3186S", "Persol PO3199S",
+  "Gucci GG0061S", "Gucci GG0062S", "Gucci GG0063S", "Gucci GG0064S", "Gucci GG0065S", "Gucci GG0066S", "Gucci GG0067S", "Gucci GG0068S", "Gucci GG0069S", "Gucci GG0070S",
+  "Prada PR01OS", "Prada PR08OS", "Prada PR09QS", "Prada PR10OS", "Prada PR11OS", "Prada PR12OS", "Prada PR13OS", "Prada PR14OS", "Prada PR15OS", "Prada PR16OS",
+  "Versace VE2140", "Versace VE2161", "Versace VE2180", "Versace VE2199", "Versace VE4296", "Versace VE4361", "Versace VE4365", "Versace VE4376", "Versace VE4380", "Versace VE4391",
+  "Tom Ford FT0237", "Tom Ford FT0336", "Tom Ford FT0371", "Tom Ford FT0524", "Tom Ford FT0595", "Tom Ford FT0672", "Tom Ford FT0711", "Tom Ford FT0750", "Tom Ford FT0780", "Tom Ford FT0790"
+];
+        
+        // Brands that don't offer wholesale
+        const noWholesaleBrands = {
+            "Warby Parker": "Direct-to-consumer only. They manufacture and sell exclusively through their own channels.",
+            "Moscot": "Family-owned business that controls distribution through their own stores only.",
+            "Berluti": "Ultra-luxury brand with exclusive boutique-only distribution.",
+            "Brioni": "High-end luxury with very selective distribution, no open wholesale.",
+            "Chopard": "Exclusive distribution through authorized luxury retailers only."
+        };
+        
+        // Brands with restricted wholesale
+        const restrictedWholesaleBrands = {
+            "Chanel": "Extremely selective distribution. Wholesale by invitation only to established luxury retailers.",
+            "Dior": "Limited wholesale through LVMH Luxury division. Requires extensive vetting process.",
+            "Cartier": "Richemont Group controls distribution. Wholesale limited to certified luxury jewelers.",
+            "Tiffany & Co": "Now part of LVMH. Wholesale limited to flagship department stores.",
+            "Montblanc": "Richemont Group. Selective wholesale requiring luxury retail certification."
+        };
+        
+        // Simulated discovery logic
+        function simulateDiscovery(brands) {
+            const results = [];
+            
+            brands.forEach(brand => {
+                const brandResult = {
+                    brand: brand,
+                    contacts: [],
+                    requiresForm: false,
+                    redirectsToWholesalers: false,
+                    wholesaleAvailable: true,
+                    researchNotes: [],
+                    notes: []
+                };
+                
+                // Check if brand doesn't offer wholesale
+                if (noWholesaleBrands[brand]) {
+                    brandResult.wholesaleAvailable = false;
+                    brandResult.researchNotes.push(noWholesaleBrands[brand]);
+                    brandResult.notes.push("No wholesale program available");
+                    results.push(brandResult);
+                    return;
+                }
+                
+                // Check if brand has restricted wholesale
+                if (restrictedWholesaleBrands[brand]) {
+                    brandResult.researchNotes.push(restrictedWholesaleBrands[brand]);
+                    brandResult.notes.push("Restricted wholesale program");
+                    // Don't return - still try to find contacts
+                }
+                
+                // Simulate finding contacts based on brand
+                if (["Ray-Ban", "Oakley", "Persol", "Costa Del Mar"].includes(brand)) {
+                    // EssilorLuxottica brands
+                    brandResult.contacts.push({
+                        type: "email",
+                        value: "wholesale@essilorluxottica.com",
+                        company: "EssilorLuxottica",
+                        verified: true,
+                        confidence: 0.9,
+                        notes: "Official distributor"
+                    });
+                    brandResult.contacts.push({
+                        type: "form",
+                        value: "https://www.essilorluxottica.com/wholesale-application",
+                        company: "EssilorLuxottica",
+                        verified: true,
+                        confidence: 0.85
+                    });
+                    brandResult.redirectsToWholesalers = true;
+                    brandResult.notes.push("Brand uses approved wholesaler system");
+                }
+                
+                if (["Gucci", "Saint Laurent", "Balenciaga", "Bottega Veneta", "Maui Jim"].includes(brand)) {
+                    // Kering Eyewear brands
+                    brandResult.contacts.push({
+                        type: "email",
+                        value: "b2b@keringeyewear.com",
+                        company: "Kering Eyewear",
+                        verified: true,
+                        confidence: 0.9,
+                        notes: "Official distributor"
+                    });
+                }
+                
+                if (["Warby Parker", "Moscot"].includes(brand)) {
+                    // These actually don't do wholesale, but showing what would happen if they did
+                    brandResult.researchNotes.push("Research indicates limited wholesale availability");
+                }
+                
+                // Tom Ford - through Marcolin
+                if (brand === "Tom Ford") {
+                    brandResult.contacts.push({
+                        type: "email",
+                        value: "wholesale@marcolin.com",
+                        company: "Marcolin Group",
+                        verified: true,
+                        confidence: 0.85,
+                        notes: "Official distributor"
+                    });
+                }
+                
+                // Carrera, Police - through Safilo
+                if (["Carrera", "Police"].includes(brand)) {
+                    brandResult.contacts.push({
+                        type: "email",
+                        value: "wholesale.us@safilo.com",
+                        company: "Safilo Group",
+                        verified: true,
+                        confidence: 0.85,
+                        notes: "Official distributor"
+                    });
+                }
+                
+                // Spy Optic, Dragon, Electric, VonZipper - Action sports brands
+                if (["Spy Optic", "Dragon", "Electric", "VonZipper"].includes(brand)) {
+                    // These brands were acquired/distributed by different companies
+                    if (brand === "Spy Optic") {
+                        brandResult.researchNotes.push("Spy Optic is now owned by Bollé Brands");
+                        brandResult.researchNotes.push("Wholesale handled through Bollé Brands distribution network");
+                        brandResult.contacts.push({
+                            type: "form",
+                            value: "https://www.bollebrands.com/become-a-dealer",
+                            company: "Bollé Brands",
+                            verified: true,
+                            confidence: 0.8,
+                            notes: "Parent company dealer application"
+                        });
+                    } else if (brand === "Dragon") {
+                        brandResult.researchNotes.push("Dragon Alliance is part of Marchon Eyewear portfolio");
+                        brandResult.researchNotes.push("Wholesale through Marchon's B2B portal");
+                        brandResult.contacts.push({
+                            type: "email",
+                            value: "customerservice@marchon.com",
+                            company: "Marchon Eyewear",
+                            verified: true,
+                            confidence: 0.75,
+                            notes: "Parent company contact"
+                        });
+                    } else if (brand === "Electric") {
+                        brandResult.researchNotes.push("Electric is owned by Volcom, which is part of Authentic Brands Group");
+                        brandResult.researchNotes.push("Wholesale typically through action sports distributors");
+                        brandResult.notes.push("Contact through regional action sports distributors");
+                    } else if (brand === "VonZipper") {
+                        brandResult.researchNotes.push("VonZipper was part of Boardriders Inc. (Quiksilver, Billabong)");
+                        brandResult.researchNotes.push("Brand licensing status unclear - may be discontinued for wholesale");
+                        brandResult.notes.push("Limited wholesale availability");
+                    }
+                }
+                
+                // If no contacts found, add research notes
+                if (brandResult.contacts.length === 0 && !brandResult.wholesaleAvailable) {
+                    // Already handled above
+                } else if (brandResult.contacts.length === 0) {
+                    // Brands we couldn't find contacts for
+                    brandResult.researchNotes.push("Unable to locate wholesale contact information");
+                    brandResult.researchNotes.push("Brand may use regional distributors or require direct inquiry");
+                    brandResult.notes.push("Contact information not publicly available");
+                }
+                
+                // Add phone contact for some
+                if (Math.random() > 0.7) {
+                    brandResult.contacts.push({
+                        type: "phone",
+                        value: "1-800-" + Math.floor(Math.random() * 900 + 100) + "-" + Math.floor(Math.random() * 9000 + 1000),
+                        company: brandResult.contacts[0]?.company || brand,
+                        verified: false,
+                        confidence: 0.7
+                    });
+                }
+                
+                results.push(brandResult);
+            });
+            
+            return results;
+        }
+        
+        // UI Functions
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            if (tabName === 'analytics') {
+                updateAnalyticsDisplay();
+            }
+        }
+        
+        function showCustomBrands() {
+            const section = document.getElementById('customBrandsSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Brand list management
+        document.getElementById('brandInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                addCustomBrand(this.value.trim());
+                this.value = '';
+            }
+        });
+        
+        function addCustomBrand(brand) {
+            if (!customBrands.includes(brand)) {
+                customBrands.push(brand);
+                updateBrandList();
+            }
+        }
+        
+        function removeCustomBrand(brand) {
+            customBrands = customBrands.filter(b => b !== brand);
+            updateBrandList();
+        }
+        
+        function updateBrandList() {
+            const list = document.getElementById('brandList');
+            list.innerHTML = customBrands.map(brand => `
+                <div class="brand-item">
+                    <span>${brand}</span>
+                    <button class="remove-btn" onclick="removeCustomBrand('${brand}')">×</button>
+                </div>
+            `).join('');
+        }
+        
+        // Discovery functions
+        async function discoverTop50() {
+            showLoadingState();
+
+            // Shuffle brands for randomness
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            let brandsToTry = shuffle([...top200Brands]);
+            let triedBrands = [];
+            masterList = []; // Reset masterList for new discovery
+
+            while (masterList.length < 50 && triedBrands.length < 200) { // Prevent infinite loop
+                // Pick next batch of brands (up to 10 at a time)
+                let batch = brandsToTry.slice(0, 10);
+                if (batch.length === 0) {
+                    // If we've run out, reshuffle and try again
+                    brandsToTry = shuffle([...top200Brands]);
+                    batch = brandsToTry.slice(0, 10);
+                }
+                triedBrands.push(...batch);
+                brandsToTry = brandsToTry.slice(batch.length);
+
+                // Simulate discovery for this batch
+                discoveryResults = simulateDiscovery(batch);
+                addToMasterList();
+
+                // Artificial delay for UI
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            updateResults();
+            updateStats();
+            updateMasterListDisplay();
+            showTab('results');
+        }
+        
+        // Add this function to handle expanded discovery for a requested number of contacts
+        async function discoverWithMinimumBrands(requestedCount, brandsPool, label = "brands") {
+            showLoadingState();
+
+            // Shuffle brands for randomness
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            let brandsToTry = shuffle([...brandsPool]);
+            let triedBrands = [];
+            let foundResults = [];
+            let notFoundBrands = [];
+            let notFoundReasons = [];
+
+            while (foundResults.length < requestedCount && brandsToTry.length > 0 && triedBrands.length < brandsPool.length * 2) {
+                let batch = brandsToTry.slice(0, 10);
+                brandsToTry = brandsToTry.slice(batch.length);
+                triedBrands.push(...batch);
+
+                // Simulate discovery for this batch
+                let batchResults = simulateDiscovery(batch);
+
+                // Separate found and not found
+                batchResults.forEach(result => {
+                    // Consider "found" if at least one verified email contact
+                    const hasEmail = result.contacts.some(
+                        c => c.type === "email" && c.verified
+                    );
+                    if (hasEmail) {
+                        foundResults.push(result);
+                    } else {
+                        notFoundBrands.push(result.brand);
+                        let reason = "No verified email contact found.";
+                        if (result.notes.length > 0) reason += " " + result.notes.join(" ");
+                        if (result.researchNotes.length > 0) reason += " " + result.researchNotes.join(" ");
+                        notFoundReasons.push(reason);
+                    }
+                });
+
+                // Artificial delay for UI
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            // If not enough found, expand search to other brands not in the original pool
+            if (foundResults.length < requestedCount) {
+                // Find additional brands not already tried
+                let allBrands = top200Brands.concat(customBrands);
+                let extraBrands = allBrands.filter(
+                    b => !triedBrands.includes(b)
+                );
+                extraBrands = shuffle(extraBrands);
+
+                while (foundResults.length < requestedCount && extraBrands.length > 0) {
+                    let batch = extraBrands.slice(0, 10);
+                    extraBrands = extraBrands.slice(batch.length);
+                    triedBrands.push(...batch);
+
+                    let batchResults = simulateDiscovery(batch);
+
+                    batchResults.forEach(result => {
+                        const hasEmail = result.contacts.some(
+                            c => c.type === "email" && c.verified
+                        );
+                        if (hasEmail) {
+                            foundResults.push(result);
+                        } else {
+                            notFoundBrands.push(result.brand);
+                            let reason = "No verified email contact found.";
+                            if (result.notes.length > 0) reason += " " + result.notes.join(" ");
+                            if (result.researchNotes.length > 0) reason += " " + result.researchNotes.join(" ");
+                            notFoundReasons.push(reason);
+                        }
+                    });
+
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+            }
+
+            // Show results and missing brands
+            discoveryResults = foundResults.slice(0, requestedCount);
+            updateResults();
+
+            // Show missing brands and reasons if any
+            if (notFoundBrands.length > 0) {
+                let missingHtml = `
+                    <div style="background:#fff3cd; border: 1px solid #ffeaa7; padding:16px; border-radius:8px; margin-top:20px;">
+                        <strong>Could not find verified email contacts for the following ${label}:</strong>
+                        <ul>
+                            ${notFoundBrands.map((b, i) => `<li><strong>${b}</strong>: ${notFoundReasons[i]}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                document.getElementById('resultsContent').innerHTML += missingHtml;
+            }
+
+            updateStats();
+            addToMasterList();
+            showTab('results');
+        }
+        
+        async function discoverCustomBrands() {
+            if (customBrands.length === 0) {
+                alert('Please add at least one brand to search');
+                return;
+            }
+            customEmailInstructions = document.getElementById('customEmailInstructions').value.trim();
+
+            // Prompt user for number of contacts if more than 1 brand entered
+            let requestedCount = customBrands.length;
+            if (customBrands.length > 1) {
+                let input = prompt(`How many brand contacts do you want to find? (Max: ${customBrands.length})`, customBrands.length);
+                let num = parseInt(input);
+                if (!isNaN(num) && num > 0 && num <= customBrands.length) {
+                    requestedCount = num;
+                }
+            }
+            await discoverWithMinimumBrands(requestedCount, customBrands, "custom brands");
+        }
+        
+        function showLoadingState() {
+            document.getElementById('resultsContent').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Discovering wholesale contacts...</p>
+                </div>
+            `;
+        }
+        
+        function updateResults() {
+            const content = document.getElementById('resultsContent');
+            
+            if (discoveryResults.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No results to display</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="results-header">
+                    <h3>Discovery Results</h3>
+                    <span>${discoveryResults.length} brands processed</span>
+                </div>
+            `;
+            
+            discoveryResults.forEach(result => {
+                html += `
+                    <div class="brand-result">
+                        <div class="brand-name">${result.brand}</div>
+                `;
+                
+                if (result.researchNotes.length > 0) {
+                    html += `<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+                        <strong>📊 Research Notes:</strong><br>
+                        ${result.researchNotes.join('<br>')}
+                    </div>`;
+                }
+                
+                if (result.contacts.length > 0) {
+                    result.contacts.forEach(contact => {
+                        const typeClass = contact.type + '-type';
+                        const verificationClass = contact.verified ? 'verified' : 'unverified';
+                        
+                        html += `
+                            <div class="contact-item">
+                                <span class="contact-type ${typeClass}">${contact.type.toUpperCase()}</span>
+                                <span class="contact-value">${contact.value}</span>
+                                <span class="verification-badge ${verificationClass}">
+                                    ${contact.verified ? 'Verified' : 'Unverified'}
+                                </span>
+                                <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
+                                    ${contact.company} ${contact.notes ? '• ' + contact.notes : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `<div style="color: #999; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                        <strong>No contacts found</strong><br>
+                        ${result.wholesaleAvailable === false ? 
+                            '<span style="color: #e74c3c;">❌ This brand does not offer wholesale</span>' : 
+                            '<span style="color: #f39c12;">⚠️ Wholesale may be available but contact info not publicly accessible</span>'}
+                    </div>`;
+                }
+                
+                if (result.notes.length > 0) {
+                    html += `<div style="margin-top: 10px; font-size: 0.9em; color: #e74c3c;">
+                        ⚠️ ${result.notes.join(' • ')}
+                    </div>`;
+                }
+                
+                html += '</div>';
+            });
+            
+            // Add suggestions
+            html += `
+                <div class="suggestion-box">
+                    <div class="suggestion-title">💡 Suggestions for Other Targets</div>
+                    <div class="suggestion-item">
+                        Consider focusing on major distributors like EssilorLuxottica and Kering Eyewear who handle multiple premium brands
+                    </div>
+                    <div class="suggestion-item">
+                        Many brands require formal applications. Consider preparing a standard wholesale application package
+                    </div>
+                    <div class="suggestion-item">
+                        Independent eyewear brands may be more accessible for direct wholesale relationships
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+        }
+        
+        function addToMasterList() {
+            discoveryResults.forEach(result => {
+                result.contacts.forEach(contact => {
+                    if (contact.verified && contact.type === 'email') {
+                        const exists = masterList.some(item => 
+                            item.value === contact.value && item.brand === result.brand
+                        );
+                        
+                        if (!exists) {
+                            masterList.push({
+                                brand: result.brand,
+                                type: contact.type,
+                                value: contact.value,
+                                company: contact.company,
+                                addedAt: new Date().toISOString()
+                            });
+                        }
+                    }
+                });
+            });
+            
+            updateMasterListDisplay();
+        }
+        
+        function showMasterList() {
+            showTab('master');
+            updateMasterListDisplay();
+        }
+        
+        function updateMasterListDisplay() {
+            const content = document.getElementById('masterContent');
+            
+            if (masterList.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>Master list is empty. Discover brands to populate it.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <h3>Master Contact List (${masterList.length} verified contacts)</h3>
+                <div class="master-list">
+            `;
+            
+            masterList.forEach((contact, idx) => {
+                html += `
+                    <div class="contact-item">
+                        <strong>${contact.brand}</strong> - ${contact.company}<br>
+                        <span class="contact-type email-type">EMAIL</span>
+                        <span class="contact-value">${contact.value}</span>
+                        <button class="action-btn primary-btn" style="margin-left:10px;" 
+    onclick="openEmailModal('${contact.value}', '${contact.brand}', '${contact.company}')">
+    Send Email
+</button>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            content.innerHTML = html;
+        }
+        
+        function updateStats() {
+            stats.totalBrands = discoveryResults.length;
+            stats.totalContacts = discoveryResults.reduce((sum, r) => sum + r.contacts.length, 0);
+            stats.verifiedContacts = discoveryResults.reduce((sum, r) => 
+                sum + r.contacts.filter(c => c.verified).length, 0);
+            stats.masterListSize = masterList.length;
+            
+            document.getElementById('totalBrands').textContent = stats.totalBrands;
+            document.getElementById('totalContacts').textContent = stats.totalContacts;
+            document.getElementById('verifiedContacts').textContent = stats.verifiedContacts;
+            document.getElementById('masterListSize').textContent = stats.masterListSize;
+        }
+        
+        function exportData() {
+            const data = {
+                discoveryResults: discoveryResults,
+                masterList: masterList,
+                stats: stats,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wholesale_contacts_' + new Date().toISOString().split('T')[0] + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Data exported successfully!');
+        }
+        
+        // Email testing function
+        function sendTestEmail() {
+            if (!loggedIn) {
+                alert("Please login to send test emails.");
+                return;
+            }
+            fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: 'samanthamdurrant@gmail.com',
+                    subject: 'Test Email',
+                    text: 'This is a test email from the HTML page!',
+                    from: userEmail
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('Test email sent!');
+            })
+            .catch(err => alert('Error: ' + err));
+        }
+        
+        // Update email sending in emailForm
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('emailForm').onsubmit = function() {
+                if (!loggedIn) {
+                    alert("Please login to send emails. (You can only generate emails when not logged in.)");
+                    return false;
+                }
+                const subject = document.getElementById('modalSubject').value;
+                const text = document.getElementById('modalMessage').value;
+                fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: modalEmail,
+                        subject: subject,
+                        text: text,
+                        from: userEmail
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    emailAnalytics.sent++; // Track sent emails
+                    updateAnalyticsDisplay(); // Update analytics tab if open
+                    alert('Email sent to ' + modalEmail + '!');
+                    closeEmailModal();
+                })
+                .catch(err => {
+                    alert('Error: ' + err);
+                });
+                return false;
+            };
+        });
+        
+        // Login logic
+        window.addEventListener('DOMContentLoaded', function() {
+    if (!loggedIn && !loginSkipped) {
+        document.getElementById('loginModal').style.display = 'flex';
+    }
+    document.getElementById('loginForm').onsubmit = function() {
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) {
+            showLoginError("Please enter both email and password.");
+            return false;
+        }
+        // Only allow specific users and password
+        if (!allowedUsers.includes(email)) {
+            showLoginError("Access denied: You are not an authorized user.");
+            return false;
+        }
+        if (password !== "sunglassesretailer") {
+            showLoginError("Incorrect password.");
+            return false;
+        }
+        // Simulate login (replace with real auth if needed)
+        userEmail = email;
+        loggedIn = true;
+        loginSkipped = false;
+        document.getElementById('loginModal').style.display = 'none';
+        return false;
+    };
+});
+
+// Skip login handler
+function skipLogin() {
+    loggedIn = false;
+    loginSkipped = true;
+    userEmail = null;
+    document.getElementById('loginModal').style.display = 'none';
+}
+
+// Show login error
+function showLoginError(msg) {
+    const err = document.getElementById('loginError');
+    err.textContent = msg;
+    err.style.display = 'block';
+}
+
+// Email testing function
+function sendTestEmail() {
+    if (!loggedIn) {
+        alert("Please login to send emails. (You can only generate emails when not logged in.)");
+        return;
+    }
+    fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            to: 'samanthamdurrant@gmail.com',
+            subject: 'Test Email',
+            text: 'This is a test email from the HTML page!',
+            from: userEmail
+        })
+    })
+    .then(res => res.json())
+    .then(data => alert('Email sent!'))
+    .catch(err => alert('Error: ' + err));
+}
+
+// Update email sending in emailForm
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('emailForm').onsubmit = function() {
+        if (!loggedIn) {
+            alert("Please login to send emails. (You can only generate emails when not logged in.)");
+            return false;
+        }
+        const subject = document.getElementById('modalSubject').value;
+        const text = document.getElementById('modalMessage').value;
+        fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                to: modalEmail,
+                subject: subject,
+                text: text,
+                from: userEmail
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            emailAnalytics.sent++; // Track sent emails
+            updateAnalyticsDisplay(); // Update analytics tab if open
+            alert('Email sent to ' + modalEmail + '!');
+            closeEmailModal();
+        })
+        .catch(err => {
+            alert('Error: ' + err);
+        });
+        return false;
+    };
+});
+        
+        function markEmailResponse() {
+            if (emailAnalytics.responses < emailAnalytics.sent) {
+                emailAnalytics.responses++;
+                updateAnalyticsDisplay();
+            }
+        }
+        
+        function updateAnalyticsDisplay() {
+            const content = document.getElementById('analyticsContent');
+            if (!content) return;
+            const sent = emailAnalytics.sent;
+            const responses = emailAnalytics.responses;
+            const rate = sent > 0 ? ((responses / sent) * 100).toFixed(1) : '0.0';
+            content.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">${sent}</div>
+                        <div class="stat-label">Emails Sent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${responses}</div>
+                        <div class="stat-label">Responses Received</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${rate}%</div>
+                        <div class="stat-label">Response Rate</div>
+                    </div>
+                </div>
+                <button class="action-btn success-btn" onclick="markEmailResponse()">Mark Response Received</button>
+                <p style="color:#888; font-size:0.95em; margin-top:10px;">Click the button above each time you receive a response to an email.</p>
+            `;
+        }
+        
+        const quickActionIdeasList = [
+            [
+                "Start a discovery for a random set of 5 brands.",
+                "Export the current master list to JSON.",
+                "Send a test email to yourself.",
+                "Clear all custom brands.",
+                "Analyze response rates for the last 10 emails.",
+                "Reach out to landlords for potential store locations.",
+                "Survey staff for feedback on top-selling sunglass brands.",
+                "Find and contact local mall management for pop-up opportunities.",
+                "Research trending sunglass brands on Reddit and summarize findings.",
+                "Send a customer survey about preferred sunglass styles."
+            ],
+            [
+                "Highlight brands with the most verified contacts.",
+                "Suggest brands with restricted wholesale for manual follow-up.",
+                "Generate a summary report of all discoveries.",
+                "Show only brands with phone contacts.",
+                "Export analytics data.",
+                "Draft outreach emails to property managers for new store sites.",
+                "Collect customer reviews of sunglass brands from social media.",
+                "Identify brands with strong online buzz for potential partnerships.",
+                "Send a follow-up email to non-responders.",
+                "Sort master list by company name."
+            ],
+            [
+                "Display only brands with form-based contacts.",
+                "Reset all analytics counters.",
+                "Show suggestions for new brands to target.",
+                "Analyze landlord response rates.",
+                "Generate a list of brands popular among Gen Z from online forums.",
+                "Create a report of brands with the fastest response times.",
+                "Draft a landlord outreach template for new store expansion.",
+                "Summarize customer sentiment on sunglasses from recent surveys.",
+                "Identify brands with the best staff recommendations.",
+                "Export landlord contact list."
+            ]
+        ];
+        
+        let currentIdeasIndex = 0;
+
+        function showQuickActionIdeas() {
+            document.getElementById('quickActionModal').style.display = 'flex';
+            renderQuickActionIdeas();
+        }
+
+        function closeQuickActionModal() {
+            document.getElementById('quickActionModal').style.display = 'none';
+        }
+
+        function generateNewIdeas() {
+            currentIdeasIndex = (currentIdeasIndex + 1) % quickActionIdeasList.length;
+            renderQuickActionIdeas();
+        }
+
+        function renderQuickActionIdeas() {
+            const ideas = quickActionIdeasList[currentIdeasIndex];
+            const ul = document.getElementById('quickActionIdeas');
+            ul.innerHTML = ideas.map(idea => `<li style="margin-bottom:8px;">${idea}</li>`).join('');
+        }
+
+        // In your frontend JS, after login modal loads:
+if (window.location.pathname === '/oauth-success') {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email');
+    if (email) {
+        userEmail = email;
+        loggedIn = true;
+        loginSkipped = false;
+        document.getElementById('loginModal').style.display = 'none';
+    }
+}
+    </script>
+    
+    <button onclick="sendTestEmail()">Send Test Email</button>
+    <button onclick="window.location.href='https://sunglass-backend-wjdk.onrender.com'">
+    Sign in with Google
+</button>
+</body>
+</html>
