@@ -623,27 +623,54 @@
         
         // Top 50 sunglass brands
         const top200Brands = [
-  "Ray-Ban", "Oakley", "Maui Jim", "Costa Del Mar", "Persol", "Tom Ford", "Gucci", "Prada", "Versace", "Warby Parker",
-  "Moscot", "Oliver Peoples", "Dior", "Chanel", "Burberry", "Coach", "Michael Kors", "Kate Spade", "Tory Burch", "Ralph Lauren",
-  "Polo Ralph Lauren", "Armani", "Dolce & Gabbana", "Fendi", "Saint Laurent", "Balenciaga", "Bottega Veneta", "Celine", "Givenchy", "Valentino",
-  "Salvatore Ferragamo", "Jimmy Choo", "Marc Jacobs", "Tiffany & Co", "Cartier", "Bvlgari", "Montblanc", "Chopard", "David Yurman", "John Varvatos",
-  "Paul Smith", "Ermenegildo Zegna", "Berluti", "Brioni", "Carrera", "Police", "Spy Optic", "Dragon", "Electric", "VonZipper",
-  "Smith Optics", "Native Eyewear", "Arnette", "Bolle", "Serengeti", "Revo", "Zeal Optics", "Julbo", "Shwood", "Randolph Engineering",
-  "Silhouette", "Lacoste", "Nike Vision", "Adidas Eyewear", "Puma Eyewear", "Fila Eyewear", "Levi's Eyewear", "Guess Eyewear", "Diesel Eyewear", "Calvin Klein Eyewear",
-  "Tommy Hilfiger Eyewear", "Hugo Boss", "Boss Orange", "Emporio Armani", "Giorgio Armani", "Roberto Cavalli", "Escada", "Max Mara", "Moschino", "Dsquared2",
-  "Jimmy Fairly", "Gentle Monster", "Illesteva", "Mykita", "Linda Farrow", "Cutler and Gross", "Retrosuperfuture", "Etnia Barcelona", "Komono", "Andy Wolf",
-  "Garrett Leight", "Salt Optics", "RAEN", "Blenders Eyewear", "Diff Eyewear", "Quay Australia", "Le Specs", "Pared Eyewear", "Sunday Somewhere", "Valley Eyewear",
-  "Akila", "Vint & York", "EyeBuyDirect", "Zenni Optical", "GlassesUSA", "LensCrafters", "Sunglass Hut", "Specsavers", "Vision Express", "Optical Express",
-  "For Art's Sake", "Oscar Magnuson", "Vogue Eyewear", "Polaroid Eyewear", "Superdry Eyewear", "Ted Baker Eyewear", "Oliver Goldsmith", "Ray-Ban Jr", "Ray-Ban Tech",
-  "Oakley Youth", "Oakley X Metal", "Prizm", "Holbrook", "Frogskins", "Jawbreaker", "Radar EV", "Flak 2.0", "Sutro", "Flight Jacket",
-  "Nike Show X2", "Nike Tailwind", "Nike Skylon Ace", "Nike Rabid", "Nike Mercurial", "Nike Trainer", "Nike Maverick", "Nike Bandit", "Nike Premier", "Nike Essential",
-  "Costa Fantail", "Costa Blackfin", "Costa Rincon", "Costa Tuna Alley", "Costa Brine", "Costa Harpoon", "Costa Permit", "Costa Saltbreak", "Costa Corbina", "Costa Reefton",
-  "Maui Jim Red Sands", "Maui Jim Peahi", "Maui Jim Banyans", "Maui Jim Ho'okipa", "Maui Jim Makaha", "Maui Jim Breakwall", "Maui Jim Stingray", "Maui Jim Big Wave", "Maui Jim Lighthouse", "Maui Jim Koki Beach",
-  "Persol PO0649", "Persol PO0714", "Persol PO3152S", "Persol PO3225S", "Persol PO3019S", "Persol PO3048S", "Persol PO3092SM", "Persol PO9649S", "Persol PO3186S", "Persol PO3199S",
-  "Gucci GG0061S", "Gucci GG0062S", "Gucci GG0063S", "Gucci GG0064S", "Gucci GG0065S", "Gucci GG0066S", "Gucci GG0067S", "Gucci GG0068S", "Gucci GG0069S", "Gucci GG0070S",
-  "Prada PR01OS", "Prada PR08OS", "Prada PR09QS", "Prada PR10OS", "Prada PR11OS", "Prada PR12OS", "Prada PR13OS", "Prada PR14OS", "Prada PR15OS", "Prada PR16OS",
-  "Versace VE2140", "Versace VE2161", "Versace VE2180", "Versace VE2199", "Versace VE4296", "Versace VE4361", "Versace VE4365", "Versace VE4376", "Versace VE4380", "Versace VE4391",
-  "Tom Ford FT0237", "Tom Ford FT0336", "Tom Ford FT0371", "Tom Ford FT0524", "Tom Ford FT0595", "Tom Ford FT0672", "Tom Ford FT0711", "Tom Ford FT0750", "Tom Ford FT0780", "Tom Ford FT0790"
+  // Major global/luxury brands
+  "Ray-Ban", "Oakley", "Persol", "Maui Jim", "Costa Del Mar", "Tom Ford", "Gucci", "Prada", "Versace", "Dior",
+  "Chanel", "Burberry", "Coach", "Michael Kors", "Kate Spade", "Tory Burch", "Ralph Lauren", "Polo Ralph Lauren",
+  "Armani", "Dolce & Gabbana", "Fendi", "Saint Laurent", "Balenciaga", "Bottega Veneta", "Celine", "Givenchy", "Valentino",
+  "Salvatore Ferragamo", "Jimmy Choo", "Marc Jacobs", "Tiffany & Co", "Cartier", "Bvlgari", "Montblanc", "Chopard",
+  "David Yurman", "John Varvatos", "Paul Smith", "Ermenegildo Zegna", "Berluti", "Brioni", "Carrera", "Police",
+  "Hugo Boss", "Boss Orange", "Emporio Armani", "Giorgio Armani", "Roberto Cavalli", "Escada", "Max Mara", "Moschino",
+  "Dsquared2", "Jimmy Fairly", "Gentle Monster", "Illesteva", "Mykita", "Linda Farrow", "Cutler and Gross",
+  "Retrosuperfuture", "Etnia Barcelona", "Komono", "Andy Wolf", "Garrett Leight", "Salt Optics", "RAEN", "Blenders Eyewear",
+  "Diff Eyewear", "Quay Australia", "Le Specs", "Pared Eyewear", "Sunday Somewhere", "Valley Eyewear", "Akila", "Vint & York",
+  "For Art's Sake", "Oscar Magnuson", "Vogue Eyewear", "Polaroid Eyewear", "Superdry Eyewear", "Ted Baker Eyewear",
+  "Oliver Goldsmith", "Silhouette", "Lacoste", "Nike Vision", "Adidas Eyewear", "Puma Eyewear", "Fila Eyewear",
+  "Levi's Eyewear", "Guess Eyewear", "Diesel Eyewear", "Calvin Klein Eyewear", "Tommy Hilfiger Eyewear",
+
+  // Sport & performance brands
+  "Smith Optics", "Native Eyewear", "Arnette", "Bolle", "Serengeti", "Revo", "Zeal Optics", "Julbo", "Shwood",
+  "Randolph Engineering", "Spy Optic", "Dragon", "Electric", "VonZipper", "Rudy Project", "Tifosi", "100%", "Uvex",
+  "Wiley X", "ESS Eyewear", "Bajío", "Suncloud", "Peppers Eyewear", "Ocean Sunglasses", "Barton Perreira",
+
+  // Independent & boutique brands
+  "Ahlem", "Article One", "Barton Perreira", "Bevel", "Blackfin", "Bonnie Clyde", "Caddis", "Coco and Breezy",
+  "Cutler and Gross", "Dita", "Eyevan", "Finlay & Co", "Freda Banana", "Gamine", "Glassy Sunhaters", "Haze Collection",
+  "Jacques Marie Mage", "Kirk & Kirk", "Krewe", "Kuboraum", "Lapima", "LGR", "Lindberg", "Lunor", "Masunaga",
+  "Matsuda", "Mita Eyewear", "Monokel", "Mr. Leight", "Nina Mur", "Oscar Deen", "Pala Eyewear", "Pared Eyewear",
+  "Paul Smith", "Piero Massaro", "Retrosuperfuture", "Salt Optics", "Smoke x Mirrors", "SPEXWAX", "Thierry Lasry",
+  "Vava Eyewear", "Vysen Eyewear", "Westward Leaning", "Yunizon", "Zyloware",
+
+  // Value/online brands
+  "EyeBuyDirect", "Zenni Optical", "GlassesUSA", "Firmoo", "Liingo Eyewear", "Privé Revaux", "MVMT", "Sojos",
+  "WearMe Pro", "Sunski", "Goodr", "Knockaround", "Diff Eyewear", "Blenders Eyewear", "Shady Rays", "Hawkers",
+  "Quay Australia", "Le Specs", "PeeperSpecs", "Peepers by PeeperSpecs", "Tijn Eyewear", "Vint & York",
+
+  // Regional & specialty brands
+  "Le Specs", "AM Eyewear", "Bailey Nelson", "Oscar Wylee", "Rodenstock", "Cazal", "IC! Berlin", "J.F. Rey",
+  "Epos Milano", "Italia Independent", "Maui Jim", "Matsuda", "Masunaga", "Orgreen", "ProDesign Denmark",
+  "Rapp Eyewear", "Res/Rei", "Sabine Be", "SALT.", "Sama Eyewear", "Sandro", "Seraphin", "Stepper Eyewear",
+  "Theo", "Traction Productions", "Vinylize", "Woow", "Yellows Plus", "Zoff", "JINS", "Jisco", "Lamarca",
+  "Miga Studio", "Nine Eyewear", "Ogi Eyewear", "Ovvo Optics", "Porsche Design", "Rag & Bone", "Rapp Eyewear",
+  "Res Rei", "Sama Eyewear", "Seraphin", "Stepper", "Structure Eyewear", "Tavat", "Thierry Lasry", "Vava Eyewear",
+
+  // More global brands (to reach 200+)
+  "Alain Mikli", "Alexander McQueen", "Anna-Karin Karlsson", "Balmain", "Barton Perreira", "Boucheron", "Brooks Brothers",
+  "Bruno Chaussignand", "Carolina Herrera", "Chloé", "Christian Lacroix", "Derek Lam", "Donna Karan", "Dsquared2",
+  "Elie Saab", "Emilio Pucci", "Etro", "Furla", "Gant", "Giorgio Armani", "Givenchy", "Gucci", "Guess", "Hugo Boss",
+  "Isabel Marant", "Jimmy Choo", "Juicy Couture", "Karl Lagerfeld", "Kenzo", "Lanvin", "Marc Jacobs", "Max Mara",
+  "Michael Kors", "Missoni", "Miu Miu", "Moncler", "Moschino", "Nina Ricci", "Paul Smith", "Philipp Plein",
+  "Pierre Cardin", "Ralph Lauren", "Roberto Cavalli", "Salvatore Ferragamo", "Sonia Rykiel", "Stella McCartney",
+  "Tommy Hilfiger", "Valentino", "Victoria Beckham", "Vivienne Westwood", "Yves Saint Laurent"
 ];
         
         // Brands that don't offer wholesale
@@ -1243,7 +1270,7 @@
                 alert("Please login to send test emails.");
                 return;
             }
-            fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+            fetch('https://backendtest-2-0rwh.onrender.com/api/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1269,7 +1296,7 @@
                 }
                 const subject = document.getElementById('modalSubject').value;
                 const text = document.getElementById('modalMessage').value;
-                fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+                fetch('https://backendtest-2-0rwh.onrender.com/api/send-email', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1344,7 +1371,7 @@ function sendTestEmail() {
         alert("Please login to send emails. (You can only generate emails when not logged in.)");
         return;
     }
-    fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+    fetch('https://backendtest-2-0rwh.onrender.com/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1368,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const subject = document.getElementById('modalSubject').value;
         const text = document.getElementById('modalMessage').value;
-        fetch('https://sunglass-backend-wjdk.onrender.com/api/send-email', {
+        fetch('https://backendtest-2-0rwh.onrender.com/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1500,7 +1527,7 @@ if (window.location.pathname === '/oauth-success') {
     </script>
     
     <button onclick="sendTestEmail()">Send Test Email</button>
-    <button onclick="window.location.href='https://sunglass-backend-wjdk.onrender.com'">
+    <button onclick="window.location.href='https://backendtest-2-0rwh.onrender.com'">
     Sign in with Google
 </button>
 </body>

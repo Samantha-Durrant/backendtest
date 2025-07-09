@@ -104,8 +104,12 @@ app.post('/api/send-email', async (req, res) => {
 });
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'Backend is running' });
+app.get('/api/health', async (req, res) => {
+  const dbState = mongoose.connection.readyState; // 1 = connected
+  res.json({
+    status: dbState === 1 ? 'OK' : 'Not connected',
+    dbState
+  });
 });
 
 // ========================================
@@ -210,7 +214,9 @@ const validateEmail = (email) => {
 // GOOGLE OAUTH2 AUTHENTICATION
 // ========================================
 
-// Replace with your allowed users
+// Comment out all Google OAuth/passport code below:
+
+/*
 const allowedUsers = [
     "samanthamdurrant@gmail.com",
     "anya.sunglassretailer@gmail.com",
@@ -219,13 +225,11 @@ const allowedUsers = [
     "admin@example.com"
 ];
 
-// Passport config
 passport.use(new GoogleStrategy({
     clientID: '825514403976-i36n5fbhof9csgm11cet3oa1h1nfa3dq.apps.googleusercontent.com',
     clientSecret: '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',
     callbackURL: 'https://ganger.com/anya/outreach/'
 }, (accessToken, refreshToken, profile, done) => {
-    // Only allow specific users
     if (allowedUsers.includes(profile.emails[0].value.toLowerCase())) {
         return done(null, profile);
     } else {
@@ -240,7 +244,6 @@ passport.deserializeUser((obj, done) => {
     done(null, obj);
 });
 
-// Routes
 app.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
@@ -248,7 +251,6 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
-        // Send user info to frontend
         res.redirect(`http://localhost:3000/oauth-success?email=${encodeURIComponent(req.user.emails[0].value)}`);
     }
 );
@@ -260,18 +262,12 @@ app.get('/api/user', (req, res) => {
         res.status(401).json({ error: 'Not authenticated' });
     }
 });
+*/
 
 // 1. --- MONGOOSE SETUP ---
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/masterlist', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-mongoose.connection.on('connected', () => {
-  console.log('MongoDB connected');
-});
-mongoose.connection.on('error', (err) => {
-  console.error('MongoDB connection error:', err);
-});
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('✅ MongoDB connected!'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // 2. --- SCHEMA & MODEL ---
 const ContactSchema = new mongoose.Schema({
